@@ -2,56 +2,45 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>古代の呪い</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body {
             font-family: 'Courier New', monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
             background-color: #000;
             color: #b30000;
             text-shadow: 0 0 5px #ff0000;
-            font-size: 16px;
         }
         #message, #ancient-text, #button-instruction {
             text-align: center;
             margin-bottom: 20px;
-            width: 100%;
-            max-width: 300px;
         }
         #show-text-btn, .color-btn {
-            font-size: 18px;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
         }
         #buttons {
             display: none;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-            max-width: 300px;
         }
         .color-btn {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
-            margin: 10px;
+            margin: 0 10px;
             box-shadow: 0 4px 8px rgba(255,0,0,0.3), 0 6px 20px rgba(255,0,0,0.2);
             transition: all 0.3s ease;
         }
-        .color-btn:active {
-            transform: translateY(5px);
-            box-shadow: 0 2px 4px rgba(255,0,0,0.3), 0 3px 10px rgba(255,0,0,0.2);
+        .color-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(255,0,0,0.5), 0 12px 40px rgba(255,0,0,0.4);
         }
         #red { background: radial-gradient(circle at 30% 30%, #ff6666, #cc0000); }
         #yellow { background: radial-gradient(circle at 30% 30%, #ffff99, #cccc00); }
@@ -63,12 +52,8 @@
             border: none;
             box-shadow: 0 0 10px #ff0000;
             transition: all 0.3s ease;
-            padding: 15px 30px;
-            border-radius: 5px;
-            width: 100%;
-            max-width: 300px;
         }
-        #show-text-btn:active {
+        #show-text-btn:hover {
             background-color: #500;
             box-shadow: 0 0 20px #ff0000;
         }
@@ -122,14 +107,10 @@
 
         function playCreepySound() {
             creepySound.currentTime = 0;
-            creepySound.play().catch(e => console.log("Audio play failed:", e));
+            creepySound.play();
         }
 
-        showTextBtn.addEventListener('click', showAncientText);
-        showTextBtn.addEventListener('touchstart', showAncientText);
-
-        function showAncientText(e) {
-            e.preventDefault();
+        showTextBtn.addEventListener('click', () => {
             playCreepySound();
             message.style.display = 'none';
             showTextBtn.style.display = 'none';
@@ -139,36 +120,29 @@
             setTimeout(() => {
                 ancientText.style.display = 'none';
                 buttonInstruction.style.display = 'block';
-                buttons.style.display = 'flex';
+                buttons.style.display = 'block';
             }, 10000);
-        }
-
-        ['red', 'yellow', 'green', 'white'].forEach(color => {
-            const button = document.getElementById(color);
-            button.addEventListener('click', () => handleButtonClick(color));
-            button.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                handleButtonClick(color);
-            });
         });
 
-        function handleButtonClick(color) {
-            playCreepySound();
-            clickedButtons.push(color);
-            if (clickedButtons.length === 4) {
-                if (clickedButtons.join(',') === 'red,green,yellow,white') {
-                    window.location.href = 'https://youtu.be/GEeahvo8_OY';
-                } else {
-                    buttons.style.display = 'none';
-                    buttonInstruction.style.display = 'none';
-                    message.textContent = '残念だ・・・・';
-                    message.style.display = 'block';
-                    setTimeout(() => {
+        ['red', 'yellow', 'green', 'white'].forEach(color => {
+            document.getElementById(color).addEventListener('click', () => {
+                playCreepySound();
+                clickedButtons.push(color);
+                if (clickedButtons.length === 4) {
+                    if (clickedButtons.join(',') === 'red,green,yellow,white') {
                         window.location.href = 'https://youtu.be/GEeahvo8_OY';
-                    }, 2000);
+                    } else {
+                        buttons.style.display = 'none';
+                        buttonInstruction.style.display = 'none';
+                        message.textContent = '残念だ・・・・';
+                        message.style.display = 'block';
+                        setTimeout(() => {
+                            window.location.href = 'https://youtu.be/GEeahvo8_OY';
+                        }, 2000);
+                    }
                 }
-            }
-        }
+            });
+        });
     </script>
 </body>
 </html>
